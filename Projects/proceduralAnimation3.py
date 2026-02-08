@@ -66,6 +66,7 @@ class Animal:
 
 
 #body
+
 segment1 = Segment(400, 400, 20)
 segment2 = Segment(400, 400, 20)
 segment3 = Segment(100, 100, 20)
