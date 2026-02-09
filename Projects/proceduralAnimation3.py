@@ -45,17 +45,20 @@ class Animal:
         segment_array_index = 1
         for segment in self.segmentArr:
             if segment == self.segmentArr[0]:
+
                 pg.draw.circle(SCREEN, COLOR, (targetx, targety), 20)
                 self.segmentArr[0].pos = (targetx, targety)
             else:
 
-                distance = np.sqrt(abs(self.segmentArr[segment_array_index-1].pos[0] - segment.pos[0]) ** 2 + abs(self.segmentArr[segment_array_index-1].pos[1] - segment.pos[1]) ** 2)
-                theta = math.degrees(math.atan2(-(self.segmentArr[segment_array_index-1].pos[1] - segment.pos[1]),  (self.segmentArr[segment_array_index-1].pos[0] - segment.pos[0])))
+                distance = np.sqrt(((self.segmentArr[segment_array_index-1].pos[0] - segment.pos[0]) ** 2) + (self.segmentArr[segment_array_index-1].pos[1] - segment.pos[1]) ** 2)
+                theta = math.radians(math.atan2((self.segmentArr[segment_array_index-1].pos[1] - segment.pos[1]), (self.segmentArr[segment_array_index-1].pos[0] - segment.pos[0])))
 
                 pg.draw.line(SCREEN, COLOR, segment.pos, self.segmentArr[segment_array_index-1].pos)
 
-
-                
+                newy = np.sin(theta)*abs(distance-self.distanceArr[segment_array_index-1])+self.segmentArr[segment_array_index].x
+                newx = np.cos(theta) * abs(distance - self.distanceArr[segment_array_index - 1])+ self.segmentArr[segment_array_index].x
+                self.segmentArr[segment_array_index].pos = (newx, newy)
+                print(newy)
                 segment_array_index += 1
 
     def FABRIKB(self):
@@ -65,9 +68,16 @@ class Animal:
 #body
 
 segment1 = Segment(400, 400, 20)
-segment2 = Segment(400, 400, 20)
-segment3 = Segment(100, 100, 20)
-animal = Animal([segment1, segment2], None)
+segment2 = Segment(400, 200, 20)
+segment3 = Segment(20, 401, 20)
+segment4 = Segment(300, 401, 20)
+segment5 = Segment(300, 401, 20)
+segment6 = Segment(300, 401, 20)
+segment7 = Segment(300, 401, 20)
+
+
+
+animal = Animal([segment1, segment2, segment3], [20, 20])
 
 while RUNNING:
     SCREEN.fill((100, 100, 100))
