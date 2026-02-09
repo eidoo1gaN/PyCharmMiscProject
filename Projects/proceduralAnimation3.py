@@ -1,6 +1,6 @@
 import numpy as np
 import pygame as pg
-
+import math
 #The fabrik algorithm works by moving the first point to the target,
 #then along the line from the next point to the point at the target, we move the second point to the distance it should be from the first point.
 #We repeat these processes for all the points, and then we do it in reverse, to the anchor point. It eventually will be optimising for a straight line,
@@ -48,17 +48,14 @@ class Animal:
                 pg.draw.circle(SCREEN, COLOR, (targetx, targety), 20)
                 self.segmentArr[0].pos = (targetx, targety)
             else:
-                extra_degrees_for_theta = 0
+
                 distance = np.sqrt(abs(self.segmentArr[segment_array_index-1].pos[0] - segment.pos[0]) ** 2 + abs(self.segmentArr[segment_array_index-1].pos[1] - segment.pos[1]) ** 2)
-                if abs(self.segmentArr[segment_array_index - 1].pos[0] - segment.pos[0]) != 0:
-                    theta = np.degrees(np.arctan(abs(self.segmentArr[segment_array_index-1].pos[1] - segment.pos[1])/abs(self.segmentArr[segment_array_index-1].pos[0] - segment.pos[0]))) + extra_degrees_for_theta
-                else:
-                    theta = 90
+                theta = math.degrees(math.atan2(-(self.segmentArr[segment_array_index-1].pos[1] - segment.pos[1]),  (self.segmentArr[segment_array_index-1].pos[0] - segment.pos[0])))
+
                 pg.draw.line(SCREEN, COLOR, segment.pos, self.segmentArr[segment_array_index-1].pos)
-                #print(segment.pos)
-                #print(self.segmentArr[segment_array_index-1].pos)
-                print(distance)
-                print(theta)
+
+
+                
                 segment_array_index += 1
 
     def FABRIKB(self):
@@ -70,7 +67,7 @@ class Animal:
 segment1 = Segment(400, 400, 20)
 segment2 = Segment(400, 400, 20)
 segment3 = Segment(100, 100, 20)
-animal = Animal([segment1, segment2, segment3], None)
+animal = Animal([segment1, segment2], None)
 
 while RUNNING:
     SCREEN.fill((100, 100, 100))
