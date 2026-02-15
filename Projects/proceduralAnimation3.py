@@ -11,7 +11,7 @@ import math
 #"Constants"
 
 
-WIDTH, HEIGHT = 1280, 640
+WIDTH, HEIGHT = 3450, 1240
 
 SCREEN = pg.display.set_mode((WIDTH, HEIGHT))
 pg.display.set_caption("Procedural Animation, with FABRIK algorithm")
@@ -49,16 +49,17 @@ class Animal:
                 pg.draw.circle(SCREEN, COLOR, (targetx, targety), 20)
                 self.segmentArr[0].pos = (targetx, targety)
             else:
-
-                distance = np.sqrt(((self.segmentArr[segment_array_index-1].pos[0] - segment.pos[0]) ** 2) + (self.segmentArr[segment_array_index-1].pos[1] - segment.pos[1]) ** 2)
-                theta = math.radians(math.atan2((self.segmentArr[segment_array_index-1].pos[1] - segment.pos[1]), (self.segmentArr[segment_array_index-1].pos[0] - segment.pos[0])))
+                #we need new formulas
+                distance = np.sqrt(abs((self.segmentArr[segment_array_index-1].x-segment.x)**2) + abs((self.segmentArr[segment_array_index-1].y-segment.y)**2))
+                theta = np.arctan((self.segmentArr[segment_array_index-1].x - segment.x)/distance)
 
                 pg.draw.line(SCREEN, COLOR, segment.pos, self.segmentArr[segment_array_index-1].pos)
 
-                newy = np.sin(theta)*abs(distance-self.distanceArr[segment_array_index-1])+self.segmentArr[segment_array_index].x
-                newx = np.cos(theta) * abs(distance - self.distanceArr[segment_array_index - 1])+ self.segmentArr[segment_array_index].x
+                newy = (distance-self.distanceArr[segment_array_index-1])/math.sin(theta)
+                newx = np.cos(theta) * (distance-self.distanceArr[segment_array_index-1]) + self.segmentArr[segment_array_index].x
                 self.segmentArr[segment_array_index].pos = (newx, newy)
-                print(newy)
+                print(theta)
+                print(distance)
                 segment_array_index += 1
 
     def FABRIKB(self):
@@ -80,15 +81,20 @@ segment7 = Segment(300, 401, 20)
 animal = Animal([segment1, segment2, segment3], [20, 20])
 
 while RUNNING:
-    SCREEN.fill((100, 100, 100))
+
 
     mousex, mousey = pg.mouse.get_pos()
-    animal.FABRIKF(mousex, mousey)
+
+
 
     pg.display.flip()
     for event in pg.event.get():
+
         if event.type == pg.QUIT:
             RUNNING = False
+        elif pg.mouse.get_pressed() == (True, False, False):
+            SCREEN.fill((100, 100, 100))
+            animal.FABRIKF(mousex, mousey)
 
 
 pg.quit()
